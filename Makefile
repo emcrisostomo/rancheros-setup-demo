@@ -15,7 +15,7 @@ VM_DISK_SIZE:=              8000
 install-docker-machine: $(DOCKER_MACHINE_PATH)
 
 $(DOCKER_MACHINE_PATH):
-	curl -f -L $(DOCKER_MACHINE_URL_PREFIX) > $${TMPDIR}/docker-machine
+	curl -fsL $(DOCKER_MACHINE_URL_PREFIX) > $${TMPDIR}/docker-machine
 	cp $${TMPDIR}/docker-machine $(DOCKER_MACHINE_PATH)
 	chmod +x $(DOCKER_MACHINE_PATH)
 
