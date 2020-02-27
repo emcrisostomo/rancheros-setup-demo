@@ -31,10 +31,10 @@ BUG_REPORT=enrico.m.crisostomo@gmail.com
 PACKAGE_VERSION=0.1.0
 
 : ${VM_CPU_COUNT:=1}
-: ${VM_RAM_SIZE:=2048}
 : ${VM_DISK_SIZE:=8000}
-: ${VM_NAME:=rancheros-vm}
 : ${VM_DRIVER:=vmwarefusion}
+: ${VM_NAME:=rancheros-vm}
+: ${VM_RAM_SIZE:=2048}
 
 : ${DOCKER_MACHINE_CACHE:=~/.docker/machine/cache}
 : ${RANCHEROS_ISO_URL:=https://releases.rancher.com/os/latest/rancheros.iso}
@@ -43,9 +43,22 @@ PACKAGE_VERSION=0.1.0
 : ${RANCHEROS_VMWARE_ISO_PATH:=${DOCKER_MACHINE_CACHE}/rancheros-autoformat.iso}
 
 # getopts
+typeset -a cpu_opt
+typeset -a disk_opt
+typeset -a driver_opt
 typeset -a help_flag
+typeset -a name_opt
+typeset -a ram_opt
 typeset -a verbose_flag
 typeset -a version_flag
+
+# vm variables
+typeset -i vm_cpu_count
+typeset -i vm_disk_size
+typeset vm_driver
+typeset vm_name
+typeset -i vm_ram_size
+
 
 # Output verbosity and logging
 exec 5>/dev/null
@@ -161,33 +174,36 @@ function create_vm()
 {
   download_iso
 
-  case ${VM_DRIVER} in
+  local -a docker_machine_cmd
+
+  docker_machine_cmd+=( docker-machine \
+                          create -d ${vm_driver} )
+
+  case ${vm_driver} in
     vmwarefusion)
-      docker-machine \
-        create -d ${VM_DRIVER} \
-        --vmwarefusion-boot2docker-url ${RANCHEROS_VMWARE_ISO_PATH} \
-        --vmwarefusion-cpu-count ${VM_CPU_COUNT} \
-        --vmwarefusion-memory-size ${VM_RAM_SIZE} \
-        --vmwarefusion-disk-size ${VM_DISK_SIZE} \
-        --vmwarefusion-no-share \
-        ${VM_NAME}
+      docker_machine_cmd+=( --vmwarefusion-boot2docker-url ${RANCHEROS_VMWARE_ISO_PATH} \
+                              --vmwarefusion-cpu-count ${vm_cpu_count} \
+                              --vmwarefusion-memory-size ${vm_ram_size} \
+                              --vmwarefusion-disk-size ${vm_disk_size} \
+                              --vmwarefusion-no-share )
       ;;
 
     virtualbox)
-      docker-machine \
-        create -d ${VM_DRIVER} \
-        --virtualbox-boot2docker-url ${RANCHEROS_ISO_PATH} \
-        --virtualbox-cpu-count ${VM_CPU_COUNT} \
-        --virtualbox-memory ${VM_RAM_SIZE} \
-        --virtualbox-disk-size ${VM_DISK_SIZE} \
-        ${VM_NAME}
+      docker_machine_cmd+=( --virtualbox-boot2docker-url ${RANCHEROS_ISO_PATH} \
+                              --virtualbox-cpu-count ${vm_cpu_count} \
+                              --virtualbox-memory ${vm_ram_size} \
+                              --virtualbox-disk-size ${vm_disk_size} )
       ;;
 
     *)
-      print "Unsupported driver: ${VM_DRIVER}" >&2
+      print "Unsupported driver: ${vm_driver}" >&2
       return 1
       ;;
   esac
+
+  docker_machine_cmd+=( ${vm_name} )
+
+  ${docker_machine_cmd}
 }
 
 function __main()
@@ -195,13 +211,24 @@ function __main()
   check_required_programs
 
   zparseopts -D -E \
-             h=help_flag    -help=help_flag            \
-             v=verbose_flag -verbose=verbose_flag      \
+             c:=cpu_opt     -cpu-count:=cpu_opt   \
+             d:=disk_opt    -disk-size:=disk_opt  \
+                            -driver:=driver_opt   \
+             h=help_flag    -help=help_flag       \
+             n:=name_opt    -name:=name_opt       \
+             r:=ram_opt     -ram-size:=ram_opt    \
+             v=verbose_flag -verbose=verbose_flag \
                             -version=version_flag
 
   (( ${#help_flag} ))    && print_usage
   (( ${#verbose_flag} )) && exec 5>&2
   (( ${#version_flag} )) && print_version
+
+  vm_cpu_count=${cpu_opt[2]-${VM_CPU_COUNT}}
+  vm_disk_size=${disk_opt[2]-${VM_DISK_SIZE}}
+  vm_driver=${driver_opt[2]-${VM_DRIVER}}
+  vm_name=${name_opt[2]-${VM_NAME}}
+  vm_ram_size=${ram_opt[2]-${VM_RAM_SIZE}}
 
   if [[ ! -t 0 ]]
   then
