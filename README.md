@@ -9,7 +9,7 @@ Advantages of RancherOS
 * It can be installed to disk quickly.
 * Installation is fast and non-interactive.
 * Installation can be configured in a simple YAML file.
-* Many OS' and Docker configuration parameters can be read and written 
+* Many OS' and Docker configuration parameters can be read and written
 using a simple CLI.
 * It always runs the latest version of Docker.
 * Ideal for developers and sysadmin alike.
@@ -26,13 +26,13 @@ Installation using docker-machine
 RancherOS can be installed using [`docker-machine`](https://docs.docker.com/machine/)
 and the VirtualBox driver using the following command:
 
-```shell script 
+```shell script
 $ docker-machine \
     create -d virtualbox \
     --virtualbox-boot2docker-url https://releases.rancher.com/os/latest/rancheros.iso \
     --virtualbox-memory 2048 \
     my-machine
-```    
+```
 
 `docker-machine` is a CLI that has helpful features that can help developers
 quickly create virtual machines, create machines remotely, access them, and
@@ -42,11 +42,11 @@ To configure the `docker` client to connect to a Docker daemon running inside
 a VM created with `docker-machine` and named `my-machine`, the following
 command can be used:
 
-```shell script 
+```shell script
 $ eval $(docker-machine env my-machine)
 ```
 
-The latest release can be downloaded from its official GitHub 
+The latest release can be downloaded from its official GitHub
 [repository](https://github.com/docker/machine/releases/).
 
 Installation on bare-metal or using a hypervisor
@@ -61,9 +61,9 @@ the official GitHub [repository](https://github.com/rancher/os/releases/).
 Once the image has been booted, it can be installed on disk using the following
 command:
 
-```shell script 
+```shell script
 $ sudo ros install -c cloud-config.yml -d /dev/sda
-```                                             
+```
 
 `cloud-config.yml` is a configuration file that is used to configure the OS.
 A minimal `cloud-config.yml` should contain at least the public key to
@@ -92,7 +92,7 @@ $ sudo ros config set rancher.docker.extra_args [-H,0.0.0.0:2375]
 Alternatively, the same property can be specified in the `cloud-config.yml`
 file:
 
-```yaml 
+```yaml
 rancher:
   docker:
     extra_args:
@@ -110,7 +110,7 @@ tls_args:
 - --tlscert=/etc/docker/tls/server-cert.pem
 - --tlskey=/etc/docker/tls/server-key.pem
 - -H=0.0.0.0:2376
-```                             
+```
 
 Configuring insecure registries
 -------------------------------
