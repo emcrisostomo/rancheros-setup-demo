@@ -107,7 +107,7 @@ rancher:
 To configure the Docker daemon to use TLS, the `rancher.docker.tls_args` should
 be used instead as in the following example:
 
-```shell script
+```yaml
 tls_args:
 - --tlsverify
 - --tlscacert=/etc/docker/tls/ca.pem
