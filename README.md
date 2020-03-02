@@ -4,7 +4,8 @@ README
 Advantages of RancherOS
 -----------------------
 
-Using RacherOS as a Docker container host has many advantages:
+Using [RacherOS](https://rancher.com/rancher-os/) as a Docker container host has
+many advantages:
 
 * Small footprint installation (ISO image approximately 150 MB).
 * It can be run as a 'live disk' if ephemeral images are needed.
@@ -57,11 +58,12 @@ The latest release can be downloaded from its official GitHub
 Installation on bare-metal or using a hypervisor
 ------------------------------------------------
 
-A bootable ISO image can be used to install RancherOS on a bare metal server or
-as a virtual machine on a hypervisor.
-
-Preconfigure ISO images for a huge variety of hypervisors can be found on the
-official GitHub [repository](https://github.com/rancher/os/releases/).
+RancherOS can easily be installed on a [bare-metal
+server](https://rancher.com/rancher-os/) using the bootable `rancheros.iso` ISO
+image.  The same ISO can be used to install a virtual machine on an hypervisor,
+although many hypervisor-specific ISO images exist.  Preconfigure ISO images for
+a huge variety of hypervisors can be found on the official GitHub
+[repository](https://github.com/rancher/os/releases/).
 
 Once the image has been booted, it can be installed on disk using the following
 command:
