@@ -21,15 +21,15 @@ uninstall-docker-machine:
 
 .PHONY: create-vm-virtualbox
 create-vm-virtualbox:
-	VM_DRIVER=virtualbox \
-	VM_NAME=$(VM_NAME) \
-		./create-rancher-instance
+	docker-machine-create-rancher-vm \
+		--driver virtualbox \
+		--name $(VM_NAME)
 
 .PHONY: create-vm-vmware-fusion
 create-vm-vmware-fusion:
-	VM_DRIVER=vmwarefusion \
-	VM_NAME=$(VM_NAME) \
-		./create-rancher-instance
+	docker-machine-create-rancher-vm \
+		--driver vmwarefusion \
+		--name $(VM_NAME)
 
 .PHONY: remove-machine
 remove-machine:
