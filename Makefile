@@ -1,6 +1,6 @@
 DOCKER_MACHINE_PATH:=       /usr/local/bin/docker-machine
 DOCKER_MACHINE_CACHE:=      ~/.docker/machine/cache
-DOCKER_MACHINE_VERSION:=            0.16.2
+DOCKER_MACHINE_VERSION:=    0.16.2
 DOCKER_MACHINE_URL_PREFIX:= https://github.com/docker/machine/releases/download/v$(DOCKER_MACHINE_VERSION)/docker-machine-$(shell uname -s)-$(shell uname -m)
 VM_NAME:=                   rancheros-vm
 VM_CPU_COUNT:=              2
